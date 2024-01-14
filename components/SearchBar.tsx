@@ -11,10 +11,14 @@ type SearchResult = {
   index: number
 }
 
-export default function SearchBar() {
+export default function SearchBar({
+  defaultSearch = '',
+}: {
+  defaultSearch?: string
+}) {
   const router = useRouter()
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(defaultSearch)
   const [active, setActive] = useState(false)
 
   const [suggestions, setSuggestions] = useState<SearchResult[]>([])
@@ -54,7 +58,9 @@ export default function SearchBar() {
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setSearch(suggestions[currentSuggestionFocusIndex].name)
+      router.push('/search/' + search)
+
+      // setSearch(suggestions[currentSuggestionFocusIndex].name)
       setActive(false)
 
       // redirect to stock page using next js router
@@ -131,7 +137,7 @@ export default function SearchBar() {
 
   // handle what happens on key press
   const handleKeyPress = useCallback((event: any) => {
-    console.log(`Key pressed: ${event.key}`)
+    // console.log(`Key pressed: ${event.key}`)
     if (event.key === '/') {
       event.preventDefault()
       setActive(true)

@@ -1,11 +1,23 @@
+import Navbar from '@/components/Navbar'
 import ResourceCard from '@/components/ResourceCard'
 import SearchBar from '@/components/SearchBar'
-import LogoIcon from '@/components/icons/LogoIcon'
+import TopicSidebar from '@/components/TopicSidebar'
 import db from '@/lib/db'
 import Image from 'next/image'
+import Link from 'next/link'
+
+const topics = [
+  'mathematics',
+  'physics',
+  'chemistry',
+  'biology',
+  'computer science',
+  'economics',
+  'psychology',
+]
 
 export default async function Home() {
-  let randomResources
+  let resources
   try {
     // get 10 random resources
     // randomResources = await db.resource.findMany({
@@ -17,7 +29,7 @@ export default async function Home() {
     // })
 
     // get most upvoted resources
-    randomResources = await db.resource.findMany({
+    resources = await db.resource.findMany({
       take: 10,
       orderBy: {
         upvotes: 'desc',
@@ -31,12 +43,7 @@ export default async function Home() {
 
   return (
     <main className='min-h-screen p-24'>
-      <nav className='font-bold mb-8'>
-        <div className='flex gap-4 items-center'>
-          <LogoIcon />
-          Lurnius
-        </div>
-      </nav>
+      <Navbar />
 
       <main className='flex gap-4'>
         <div>
@@ -46,14 +53,14 @@ export default async function Home() {
             <SearchBar />
           </div>
           <div className='grid gap-4'>
-            {randomResources &&
-              randomResources.map((resource) => (
+            {resources &&
+              resources.map((resource) => (
                 <ResourceCard key={resource.id} resource={resource} />
               ))}
           </div>
         </div>
-        <div>Related Resources</div>
-        <div>Topics</div>
+        {/* <div>Related Resources</div> */}
+        <TopicSidebar params={{ topic: '' }} />
       </main>
     </main>
   )
