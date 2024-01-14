@@ -1,8 +1,10 @@
 import Navbar from '@/components/Navbar'
+import RelatedSidebar from '@/components/RelatedSidebar'
 import ResourceCard from '@/components/ResourceCard'
 import SearchBar from '@/components/SearchBar'
 import LogoIcon from '@/components/icons/LogoIcon'
 import db from '@/lib/db'
+import { Resource } from '@prisma/client'
 import Image from 'next/image'
 
 export default async function SearchQuery({
@@ -14,6 +16,7 @@ export default async function SearchQuery({
   // console.log(params.query)
 
   let resources
+  let relatedResources
   try {
     // get most top upvoted resources that match the query
 
@@ -40,9 +43,37 @@ export default async function SearchQuery({
       },
     })
 
-    // console.log(resources)
+    let keywords: string[] = []
+    // loop over resources and get name
+    resources.forEach((resource) => {
+      // split name into words
+      const words = resource.name.split(' ')
+      // loop over words and add to keywords
+      words.forEach((word) => {
+        // check if word is in keywords
+        if (!keywords.includes(word)) {
+          // add to keywords
+          keywords.push(word)
+        }
+      })
+    })
 
-    // console.log(randomResources)
+    // find resources that match keywords
+    relatedResources = await db.resource.findMany({
+      where: {
+        OR: keywords.map((keyword) => ({
+          name: {
+            contains: keyword,
+          },
+        })),
+      },
+      take: 30,
+      orderBy: {
+        upvotes: 'desc',
+      },
+    })
+
+    console.log(relatedResources)
   } catch (error) {
     console.log(error)
   }
@@ -51,18 +82,25 @@ export default async function SearchQuery({
     <main className='min-h-screen p-24'>
       <Navbar />
 
-      <section className='grid gap-4 mb-4'>
-        <div className='font-bold'>Learn + Curious = Lurnious with us!</div>
+      <main className='flex gap-4'>
+        <div>
+          <div className='grid gap-4 mb-4'>
+            <div className='font-bold'>
+              Learn + Curious + AI = Lurnius with us!
+            </div>
 
-        <SearchBar defaultSearch={params.query} />
-      </section>
-
-      <section className='grid gap-4'>
-        {resources &&
-          resources.map((resource) => (
-            <ResourceCard key={resource.id} resource={resource} />
-          ))}
-      </section>
+            <SearchBar />
+          </div>
+          <div className='grid gap-4'>
+            {resources &&
+              resources.map((resource) => (
+                <ResourceCard key={resource.id} resource={resource} />
+              ))}
+          </div>
+        </div>
+        {/* <div>Related Resources</div> */}
+        {relatedResources && <RelatedSidebar resources={relatedResources} />}
+      </main>
     </main>
   )
 }

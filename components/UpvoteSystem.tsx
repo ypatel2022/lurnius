@@ -57,7 +57,7 @@ export default function UpvoteSystem({
   }
 
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col justify-center items-center z-20'>
       <form action={upvote}>
         <button className='cursor-pointer'>
           <ArrowUpCircleIcon />
