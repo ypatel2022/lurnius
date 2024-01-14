@@ -19,7 +19,7 @@ export default function RelatedSidebar({
 }) {
   return (
     <div className='w-96'>
-      <div className='font-bold mb-4'>Topics</div>
+      <div className='font-bold mb-4'>Related Resources</div>
 
       <div className='grid gap-4 border rounded-md bg-gray-50 p-4'>
         {resources.map((res) => (
