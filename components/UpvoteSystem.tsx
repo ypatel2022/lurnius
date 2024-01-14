@@ -2,6 +2,7 @@ import React from 'react'
 import ArrowDownCircleIcon from './icons/ArrowDownCircleIcon'
 import ArrowUpCircleIcon from './icons/ArrowUpCircleIcon'
 import db from '@/lib/db'
+import { revalidatePath } from 'next/cache'
 // import { upvote, downvote } from '@/actions/upvote'
 
 export default function UpvoteSystem({
@@ -28,6 +29,8 @@ export default function UpvoteSystem({
       },
     })
 
+    revalidatePath('/')
+
     return resource
   }
 
@@ -47,6 +50,8 @@ export default function UpvoteSystem({
         upvotes: upvotes - 1,
       },
     })
+
+    revalidatePath('/')
 
     return resource
   }

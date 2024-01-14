@@ -24,7 +24,7 @@ export default async function Home() {
       },
     })
 
-    console.log(randomResources)
+    // console.log(randomResources)
   } catch (error) {
     console.log(error)
   }
@@ -38,18 +38,23 @@ export default async function Home() {
         </div>
       </nav>
 
-      <section className='grid gap-4 mb-4'>
-        <div className='font-bold'>Learn + Curious = Lurnious with us!</div>
+      <main className='flex gap-4'>
+        <div>
+          <div className='grid gap-4 mb-4'>
+            <div className='font-bold'>Learn + Curious = Lurnious with us!</div>
 
-        <SearchBar />
-      </section>
-
-      <section className='grid gap-4'>
-        {randomResources &&
-          randomResources.map((resource) => (
-            <ResourceCard resource={resource} />
-          ))}
-      </section>
+            <SearchBar />
+          </div>
+          <div className='grid gap-4'>
+            {randomResources &&
+              randomResources.map((resource) => (
+                <ResourceCard key={resource.id} resource={resource} />
+              ))}
+          </div>
+        </div>
+        <div>Related Resources</div>
+        <div>Topics</div>
+      </main>
     </main>
   )
 }

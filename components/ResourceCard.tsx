@@ -2,6 +2,9 @@ import React from 'react'
 import { Resource } from '@prisma/client'
 import UpvoteSystem from './UpvoteSystem'
 
+const placeholderImage =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAMFBMVEWpqammpqbT09PX19fc3Nzi4uLm5uajo6Py8vLQ0NDd3d3+/v76+vrx8fHt7e3k5OQpkTr2AAABZ0lEQVR4nO3dQWrCABRF0URNorbV/e+2UmihOKgURE5yzwrenX/4w9v78eNyuczzfJ1uDt/2v+z+b/+nwyPO0wOu853jcF1+jL7lzmmYlmHNxt0wja8e8VSbKDyvvvBQoa1CX4W+Cn0V+ir03Qr3Fdoq9FXoq9BXoa9CX4W+Cn0V+ir0Veir0Fehr0Jfhb4KfZso3FVoq9BXoa9CX4W+Cn0V+ir0Veir0Fehr0Jfhb4KfRX6KvRV6KvQV6GvQt8mLoYqxFXoq9BXoa9CX4W+Cn0V+ir0Veir0Fehr0Jfhb4KfRX6KvRV6KvQV6FvE19YKsRV6KvQV6GvQl+Fvgp9Ffoq9FXoq9BXoa9CX4W+Cn0V+ir0baLwvPrCqUJbhb4KfRX6KvRV6KvQV6GvQl+Fvgp9Ffoq9FXoq9BXoa9CX4W+TRTOy6tHPFWFvgp9Ffoq9FXoq9BXoa9C31fhuGbLaTiedmt2mj8BNIYPDiZn2y8AAAAASUVORK5CYII='
+
 export default function ResourceCard({ resource }: { resource: Resource }) {
   // convert resource.publishedAt to a readable format
   const date = new Date(resource.publishedAt || '')
@@ -37,17 +40,29 @@ export default function ResourceCard({ resource }: { resource: Resource }) {
     }
   }
 
+  function UpperToTitleCase(str: string) {
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    })
+  }
+
   return (
     <div className='rounded-md border px-4 py-2 outline-1 outline-sky-200 flex gap-4'>
-      <img src={resource?.thumbnail || ''} alt={resource.name} />
+      <img
+        src={resource?.thumbnail || placeholderImage}
+        alt=''
+        className='w-24'
+      />
       <div className='flex-grow'>
-        <div>
+        <div className='text-gray-400 text-sm'>
           {date.getDate()} {monthToString(date.getMonth())},{' '}
           {date.getFullYear()}
         </div>
         <div>{resource.name}</div>
         <div>{resource.description || ''}</div>
-        <div>{resource.type}</div>
+        <div className='text-sm font-bold text-sky-400'>
+          {UpperToTitleCase(resource.type)}
+        </div>
       </div>
       <div>
         <UpvoteSystem id={resource.id} upvotes={resource.upvotes} />
