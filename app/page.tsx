@@ -48,7 +48,9 @@ export default async function Home() {
       <main className='flex gap-4'>
         <div>
           <div className='grid gap-4 mb-4'>
-            <div className='font-bold'>Learn + Curious = Lurnious with us!</div>
+            <div className='font-bold'>
+              Learn + Curious + AI = Lurnious with us!
+            </div>
 
             <SearchBar />
           </div>
