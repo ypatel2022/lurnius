@@ -48,7 +48,7 @@ export default function ResourceCard({ resource }: { resource: Resource }) {
   }
 
   return (
-    <div className='rounded-md border px-4 py-2 outline-1 outline-sky-200 flex gap-4'>
+    <div className='rounded-md border px-4 py-2 outline-1 outline-sky-200 flex gap-4 max-w-7xl'>
       <img
         src={resource?.thumbnail || placeholderImage}
         alt=''
@@ -60,9 +60,9 @@ export default function ResourceCard({ resource }: { resource: Resource }) {
           {date.getFullYear()}
         </div>
         <Link href={resource.url} className='hover:underline font-semibold'>
-          {resource.name}
+          {resource.name.slice(0, 50)}
         </Link>
-        <div>{resource.description || ''}</div>
+        <div>{resource?.description?.slice(0, 100) || ''}</div>
         <div className='text-sm font-bold text-sky-400'>
           {UpperToTitleCase(resource.type)}
         </div>

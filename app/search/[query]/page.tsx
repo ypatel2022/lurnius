@@ -4,6 +4,7 @@ import ResourceCard from '@/components/ResourceCard'
 import SearchBar from '@/components/SearchBar'
 import LogoIcon from '@/components/icons/LogoIcon'
 import db from '@/lib/db'
+import { findMore } from '@/lib/find'
 import { Resource } from '@prisma/client'
 import Image from 'next/image'
 
@@ -42,6 +43,32 @@ export default async function SearchQuery({
         upvotes: 'desc',
       },
     })
+
+    if (resources.length < 5) {
+      try {
+        if (resources.length < 15) {
+          await findMore(params.query)
+        }
+      } catch (err) {
+        console.log(err)
+      }
+
+      // do or search with all words from query
+      const queryWords = params.query.split(' ')
+      resources = await db.resource.findMany({
+        where: {
+          OR: queryWords.map((word) => ({
+            name: {
+              contains: word,
+            },
+          })),
+        },
+        take: 30,
+        orderBy: {
+          upvotes: 'desc',
+        },
+      })
+    }
 
     let keywords: string[] = []
     // loop over resources and get name

@@ -17,7 +17,7 @@ export default function TopicSidebar({
   params: { topic: string }
 }) {
   return (
-    <div>
+    <div className='w-96'>
       <div className='font-bold mb-4'>Topics</div>
 
       <div className='grid gap-1'>

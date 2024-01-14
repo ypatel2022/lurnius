@@ -30,7 +30,7 @@ export default async function Home() {
 
     // get most upvoted resources
     resources = await db.resource.findMany({
-      take: 10,
+      take: 30,
       orderBy: {
         upvotes: 'desc',
       },
